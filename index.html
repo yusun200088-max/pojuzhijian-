@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>破局者图鉴 · AI破局俱乐部</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #ffffff;
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ===== 粒子画布 ===== */
+  #particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== 主内容 ===== */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px 80px;
+  }
+
+  /* ===== 顶部标题区 ===== */
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .header .eyebrow {
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: #999;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 72px;
+    font-weight: 900;
+    color: #1a1a2e;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .header h1 em {
+    font-style: normal;
+    color: #f5a623;
+  }
+
+  .header .sub {
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: #aaa;
+    margin-bottom: 28px;
+  }
+
+  .header .intro-line {
+    font-size: 18px;
+    color: #333;
+    line-height: 2;
+  }
+
+  .header .intro-line strong {
+    color: #1a1a2e;
+    border-bottom: 2px solid #f5a623;
+    font-weight: 700;
+  }
+
+  /* ===== 三张卡片 ===== */
+  .cards {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 60px;
+  }
+
+  .card {
+    flex: 1;
+    max-width: 340px;
+    border-radius: 20px;
+    padding: 36px 28px 28px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /* 卡片背景色 */
+  .card-1 { background: linear-gradient(160deg, #2a1200 0%, #3d1f00 100%); }
+  .card-2 { background: linear-gradient(160deg, #001428 0%, #00243d 100%); }
+  .card-3 { background: linear-gradient(160deg, #1c1400 0%, #2e2200 100%); }
+
+  /* 卡片悬停 */
+  .card:hover {
+    transform: translateY(-6px);
+  }
+
+  .card-1:hover { box-shadow: 0 0 40px 8px rgba(255, 140, 50, 0.45); }
+  .card-2:hover { box-shadow: 0 0 40px 8px rgba(58, 154, 232, 0.45); }
+  .card-3:hover { box-shadow: 0 0 40px 8px rgba(245, 166, 35, 0.45); }
+
+  /* 卡片边缘光 */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1.5px;
+    background: transparent;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: background 0.3s ease;
+    pointer-events: none;
+  }
+  .card-1:hover::before { background: linear-gradient(160deg, rgba(255,140,50,0.8), rgba(255,140,50,0.1)); }
+  .card-2:hover::before { background: linear-gradient(160deg, rgba(58,154,232,0.8), rgba(58,154,232,0.1)); }
+  .card-3:hover::before { background: linear-gradient(160deg, rgba(245,166,35,0.8), rgba(245,166,35,0.1)); }
+
+  /* 卡片编号 */
+  .card-num {
+    position: absolute;
+    top: 16px; right: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* 卡片图片区（暂用色块代替） */
+  .card-image {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    flex-shrink: 0;
+  }
+  .card-1 .card-image { background: rgba(255,140,50,0.15); border: 2px dashed rgba(255,140,50,0.3); }
+  .card-2 .card-image { background: rgba(58,154,232,0.15); border: 2px dashed rgba(58,154,232,0.3); }
+  .card-3 .card-image { background: rgba(245,166,35,0.15); border: 2px dashed rgba(245,166,35,0.3); }
+
+  /* 卡片名称 */
+  .card-name {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+  .card-1 .card-name { color: #FF8C32; }
+  .card-2 .card-name { color: #4AAEFF; }
+  .card-3 .card-name { color: #F5A623; }
+
+  /* 卡片描述 */
+  .card-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    line-height: 2;
+    margin-bottom: 24px;
+    flex: 1;
+  }
+
+  /* 卡片标签 */
+  .card-tag {
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    transition: opacity 0.2s;
+  }
+  .card-1 .card-tag { background: #FF8C32; color: white; }
+  .card-2 .card-tag { background: #3A9AE8; color: white; }
+  .card-3 .card-tag { background: #F5A623; color: white; }
+  .card:hover .card-tag { opacity: 0.85; }
+
+  /* ===== 底部CTA区 ===== */
+  .cta {
+    text-align: center;
+  }
+
+  .cta-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin-bottom: 28px;
+  }
+
+  .rewards {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .reward-pill {
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #f5f5f5;
+    border: 1px solid #e8e8e8;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-meta {
+    font-size: 13px;
+    color: #bbb;
+    letter-spacing: 3px;
+  }
+  .footer-meta span { margin: 0 12px; }
+
+  /* ===== 弹窗 ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    width: 340px;
+    border-radius: 20px;
+    padding: 36px 32px 32px;
+    position: relative;
+    text-align: center;
+    animation: modalIn 0.25s ease;
+  }
+  @keyframes modalIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .modal-1 { background: linear-gradient(160deg, #2a1200, #3d1f00); }
+  .modal-2 { background: linear-gradient(160deg, #001428, #00243d); }
+  .modal-3 { background: linear-gradient(160deg, #1c1400, #2e2200); }
+
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 18px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: white; }
+
+  .modal-congrats {
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 6px;
+  }
+
+  .modal-camp {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+  }
+  .modal-1 .modal-camp { color: #FF8C32; }
+  .modal-2 .modal-camp { color: #4AAEFF; }
+  .modal-3 .modal-camp { color: #F5A623; }
+
+  .modal-label {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 12px;
+  }
+
+  .modal-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08);
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    letter-spacing: 3px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 20px;
+  }
+  .modal-input::placeholder { color: rgba(255,255,255,0.25); font-size: 14px; letter-spacing: 1px; }
+  .modal-1 .modal-input:focus { border-color: #FF8C32; }
+  .modal-2 .modal-input:focus { border-color: #4AAEFF; }
+  .modal-3 .modal-input:focus { border-color: #F5A623; }
+
+  .modal-submit {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .modal-submit:hover { opacity: 0.88; }
+  .modal-submit:active { transform: scale(0.98); }
+  .modal-1 .modal-submit { background: #FF8C32; color: white; }
+  .modal-2 .modal-submit { background: #3A9AE8; color: white; }
+  .modal-3 .modal-submit { background: #F5A623; color: white; }
+
+  .modal-success {
+    display: none;
+    font-size: 15px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 16px;
+    line-height: 1.8;
+  }
+
+  /* ===== 数据表格（隐藏，仅导出用） ===== */
+  #data-panel {
+    display: none;
+    position: fixed;
+    bottom: 20px; right: 20px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    z-index: 200;
+    min-width: 280px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  #data-panel h3 {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #data-panel h3 button {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 3px 10px;
+    cursor: pointer;
+    color: #666;
+  }
+  #data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  #data-table th {
+    background: #f8f8f8;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 1px solid #eee;
+  }
+  #data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f5f5f5;
+    color: #333;
+  }
+
+  /* 数据面板触发按钮（管理员用，右下角隐藏） */
+  #admin-btn {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    background: rgba(0,0,0,0.08);
+    border: none;
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 199;
+    color: #ccc;
+    transition: color 0.2s;
+  }
+  #admin-btn:hover { color: #999; }
+</style>
+</head>
+<body>
+
+<!-- 粒子背景 -->
+<canvas id="particles"></canvas>
+
+<div class="container">
+
+  <!-- 顶部标题 -->
+  <div class="header">
+    <div class="eyebrow">AI 破局俱乐部 · 知识星球</div>
+    <h1>破局者<em>图鉴</em></h1>
+    <div class="sub">AI 破局之旅 · 30天冒险</div>
+    <div class="intro-line">
+      这本图鉴，专门记录<strong>真实干过一件事的人</strong><br>
+      选择你的阵营，写下你的故事，让我们把你收录进来
+    </div>
+  </div>
+
+  <!-- 三张卡片 -->
+  <div class="cards">
+
+    <div class="card card-1" onclick="openModal(1)">
+      <div class="card-num">01</div>
+      <div class="card-image">🔄</div>
+      <div class="card-name">AI 逆袭者</div>
+      <div class="card-desc">
+        用AI把处境翻了个个儿<br>
+        那个关键时刻，那个选择<br>
+        值得被好好记一笔
+      </div>
+      <div class="card-tag">逆风翻盘</div>
+    </div>
+
+    <div class="card card-2" onclick="openModal(2)">
+      <div class="card-num">02</div>
+      <div class="card-image">⚒️</div>
+      <div class="card-name">AI 实操派</div>
+      <div class="card-desc">
+        工具清单、操作步骤、踩坑记录<br>
+        细到别人能照着做<br>
+        写出来才是真本事
+      </div>
+      <div class="card-tag">真刀真枪</div>
+    </div>
+
+    <div class="card card-3" onclick="openModal(3)">
+      <div class="card-num">03</div>
+      <div class="card-image">🚀</div>
+      <div class="card-name">AI 独行者</div>
+      <div class="card-desc">
+        就一个人，但做出来了<br>
+        多少时间、多少收入、多大规模<br>
+        用数字告诉我们
+      </div>
+      <div class="card-tag">一人成军</div>
+    </div>
+
+  </div>
+
+  <!-- 底部CTA -->
+  <div class="cta">
+    <div class="cta-title">你是哪种破局者？选择阵营，为你的阵营抢精华</div>
+    <div class="rewards">
+      <div class="reward-pill">🏆 精华前五 · 送限定短袖</div>
+      <div class="reward-pill">✨ 首次精华 · 也送短袖</div>
+      <div class="reward-pill">💎 第一阵营 · 瓜分5颗AI之心</div>
+      <div class="reward-pill">🔮 发长文 · 得晶体</div>
+    </div>
+    <div class="footer-meta">
+      <span>· 30天冲刺 ·</span>
+      <span>· 2000字以上长文 ·</span>
+      <span>· AI破局俱乐部 ·</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- 弹窗 -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-congrats">恭喜选择</div>
+    <div class="modal-camp" id="modal-camp-name"></div>
+    <div class="modal-label">请输入你的星球编号</div>
+    <input
+      class="modal-input"
+      id="modal-input"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      placeholder="请输入数字编号"
+      oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+      onkeydown="if(event.key==='Enter')submitForm()"
+    >
+    <button class="modal-submit" id="modal-submit-btn" onclick="submitForm()">确认加入阵营</button>
+    <div class="modal-success" id="modal-success">
+      ✅ 报名成功！<br>欢迎加入 <span id="success-camp"></span>
+    </div>
+  </div>
+</div>
+
+<!-- 管理员数据面板 -->
+<button id="admin-btn" onclick="toggleDataPanel()" title="查看报名数据">📋</button>
+<div id="data-panel">
+  <h3>
+    报名数据
+    <button onclick="exportCSV()">导出 CSV</button>
+  </h3>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>星球编号</th>
+        <th>阵营</th>
+      </tr>
+    </thead>
+    <tbody id="data-body"></tbody>
+  </table>
+  <div id="data-empty" style="text-align:center;color:#bbb;font-size:13px;padding:16px 0;">暂无报名数据</div>
+</div>
+
+<script>
+// ===== 粒子系统 =====
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function createParticle() {
+  return {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 60 + 20,
+    opacity: Math.random() * 0.06 + 0.02,
+    dx: (Math.random() - 0.5) * 0.3,
+    dy: (Math.random() - 0.5) * 0.3,
+    hue: Math.random() > 0.5 ? 210 : 220,
+  };
+}
+
+for (let i = 0; i < 12; i++) particles.push(createParticle());
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+    grad.addColorStop(0, `hsla(${p.hue}, 80%, 65%, ${p.opacity})`);
+    grad.addColorStop(1, `hsla(${p.hue}, 80%, 65%, 0)`);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < -p.r) p.x = canvas.width + p.r;
+    if (p.x > canvas.width + p.r) p.x = -p.r;
+    if (p.y < -p.r) p.y = canvas.height + p.r;
+    if (p.y > canvas.height + p.r) p.y = -p.r;
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ===== 阵营数据 =====
+const camps = {
+  1: { name: 'AI 逆袭者', cls: 'modal-1' },
+  2: { name: 'AI 实操派', cls: 'modal-2' },
+  3: { name: 'AI 独行者', cls: 'modal-3' },
+};
+
+let currentCamp = null;
+let registrations = JSON.parse(localStorage.getItem('pojuRegistrations') || '[]');
+
+// ===== 弹窗 =====
+function openModal(campId) {
+  currentCamp = campId;
+  const camp = camps[campId];
+  const modal = document.getElementById('modal-box');
+  modal.className = 'modal ' + camp.cls;
+  document.getElementById('modal-camp-name').textContent = camp.name + ' 阵营';
+  document.getElementById('modal-input').value = '';
+  document.getElementById('modal-success').style.display = 'none';
+  document.getElementById('modal-submit-btn').style.display = 'block';
+  document.getElementById('modal-input').style.display = 'block';
+  document.querySelector('.modal-label').style.display = 'block';
+  document.getElementById('modal-overlay').classList.add('active');
+  setTimeout(() => document.getElementById('modal-input').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  currentCamp = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ===== Google Sheets 接口 =====
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyVIUht1iTbHBHPOnexKPOp0Mv7Fo1TpI9eVdFPvAvK_-4-lsHmw6yusAyma30oOLBf/exec';
+
+// ===== 提交 =====
+function submitForm() {
+  const input = document.getElementById('modal-input');
+  const val = input.value.trim();
+  if (!val) { input.style.borderColor = '#ff4444'; setTimeout(() => input.style.borderColor = '', 1000); return; }
+
+  const btn = document.getElementById('modal-submit-btn');
+  btn.textContent = '提交中...';
+  btn.disabled = true;
+
+  const record = { id: val, camp: camps[currentCamp].name, time: new Date().toLocaleString() };
+
+  // 写入 Google Sheets（用GET方式绕过跨域）
+  const params = new URLSearchParams({ id: val, camp: camps[currentCamp].name });
+  fetch(SHEET_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
+
+  // 同时存本地备份
+  registrations.push(record);
+  localStorage.setItem('pojuRegistrations', JSON.stringify(registrations));
+
+  document.getElementById('modal-submit-btn').style.display = 'none';
+  document.getElementById('modal-input').style.display = 'none';
+  document.querySelector('.modal-label').style.display = 'none';
+  const successEl = document.getElementById('modal-success');
+  document.getElementById('success-camp').textContent = camps[currentCamp].name;
+  successEl.style.display = 'block';
+
+  updateDataTable();
+  setTimeout(closeModal, 2000);
+}
+
+// ===== 数据表格 =====
+function updateDataTable() {
+  const tbody = document.getElementById('data-body');
+  const empty = document.getElementById('data-empty');
+  tbody.innerHTML = '';
+  if (registrations.length === 0) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  registrations.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.id}</td><td>${r.camp}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleDataPanel() {
+  const panel = document.getElementById('data-panel');
+  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  updateDataTable();
+}
+
+// ===== 导出CSV =====
+function exportCSV() {
+  if (registrations.length === 0) { alert('暂无数据'); return; }
+  let csv = '星球编号,阵营\n';
+  registrations.forEach(r => { csv += `${r.id},${r.camp}\n`; });
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = '破局者图鉴报名数据.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+updateDataTable();
+</script>
+</body>
+</html>
