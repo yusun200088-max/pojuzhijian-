@@ -342,6 +342,12 @@
     line-height: 1.8;
   }
 
+  /* ===== 移动端优化 ===== */
+  * { -webkit-tap-highlight-color: transparent; }
+  .card, .modal-submit, .modal-close, .card-tag {
+    touch-action: manipulation;
+  }
+
   /* ===== 数据表格（隐藏，仅导出用） ===== */
   #data-panel {
     display: none;
@@ -622,31 +628,38 @@ const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyVIUht1iTbHBHPOnexKP
 function submitForm() {
   const input = document.getElementById('modal-input');
   const val = input.value.trim();
-  if (!val) { input.style.borderColor = '#ff4444'; setTimeout(() => input.style.borderColor = '', 1000); return; }
+  if (!val) {
+    input.style.borderColor = '#ff4444';
+    setTimeout(() => input.style.borderColor = '', 1000);
+    return;
+  }
 
   const btn = document.getElementById('modal-submit-btn');
+  const campName = camps[currentCamp].name;
+  const campId = currentCamp;
+
   btn.textContent = '提交中...';
   btn.disabled = true;
 
-  const record = { id: val, camp: camps[currentCamp].name, time: new Date().toLocaleString() };
-
-  // 写入 Google Sheets（用GET方式绕过跨域）
-  const params = new URLSearchParams({ id: val, camp: camps[currentCamp].name });
+  // 发送到 Google Sheets（fire-and-forget，不等响应）
+  const params = new URLSearchParams({ id: val, camp: campName });
   fetch(SHEET_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
 
-  // 同时存本地备份
+  // 本地备份
+  const record = { id: val, camp: campName, time: new Date().toLocaleString() };
   registrations.push(record);
   localStorage.setItem('pojuRegistrations', JSON.stringify(registrations));
-
-  document.getElementById('modal-submit-btn').style.display = 'none';
-  document.getElementById('modal-input').style.display = 'none';
-  document.querySelector('.modal-label').style.display = 'none';
-  const successEl = document.getElementById('modal-success');
-  document.getElementById('success-camp').textContent = camps[currentCamp].name;
-  successEl.style.display = 'block';
-
   updateDataTable();
-  setTimeout(closeModal, 2000);
+
+  // 立即显示成功（不等服务器，避免卡住）
+  setTimeout(() => {
+    btn.style.display = 'none';
+    input.style.display = 'none';
+    document.querySelector('.modal-label').style.display = 'none';
+    document.getElementById('success-camp').textContent = campName;
+    document.getElementById('modal-success').style.display = 'block';
+    setTimeout(closeModal, 2000);
+  }, 400);
 }
 
 // ===== 数据表格 =====
