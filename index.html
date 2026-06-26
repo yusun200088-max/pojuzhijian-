@@ -4,16 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>破局者图鉴 · AI破局俱乐部</title>
- .fog {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-}
-.fog-1 { width: 500px; height: 500px; background: rgba(100,160,255,0.12); top: -150px; left: -150px; }
-.fog-2 { width: 600px; height: 600px; background: rgba(80,130,255,0.1); bottom: -200px; right: -150px; }
-.fog-3 { width: 350px; height: 350px; background: rgba(140,190,255,0.08); top: 45%; left: 38%; }
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -23,6 +13,18 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
+
+  /* 蓝色雾气 */
+  .fog {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .fog-1 { width: 500px; height: 500px; background: rgba(100,160,255,0.13); top: -150px; left: -150px; }
+  .fog-2 { width: 600px; height: 600px; background: rgba(80,130,255,0.1); bottom: -200px; right: -150px; }
+  .fog-3 { width: 350px; height: 350px; background: rgba(140,190,255,0.09); top: 45%; left: 38%; }
 
   #particles {
     position: fixed;
@@ -40,51 +42,45 @@
     padding: 48px 32px 64px;
   }
 
-  /* ===== 顶部标题 ===== */
+  /* 标题 */
   .header {
     text-align: center;
     margin-bottom: 52px;
   }
-
   .header .eyebrow {
     font-size: 12px;
     letter-spacing: 6px;
-    color: rgba(255,255,255,0.35);
+    color: #aaa;
     margin-bottom: 14px;
   }
-
   .header h1 {
     font-size: 52px;
     font-weight: 900;
-    color: #ffffff;
+    color: #1a1a2e;
     line-height: 1.1;
     margin-bottom: 10px;
   }
-
   .header h1 em {
     font-style: normal;
     color: #f5a623;
   }
-
   .header .sub {
     font-size: 13px;
     letter-spacing: 4px;
-    color: rgba(255,255,255,0.3);
+    color: #bbb;
     margin-bottom: 20px;
   }
-
   .header .intro-line {
     font-size: 16px;
-    color: rgba(255,255,255,0.55);
+    color: #666;
     line-height: 2;
   }
-
   .header .intro-line strong {
-    color: rgba(255,255,255,0.9);
+    color: #1a1a2e;
     font-weight: 700;
   }
 
-  /* ===== 三张卡片 ===== */
+  /* 卡片 */
   .cards {
     display: flex;
     gap: 28px;
@@ -101,7 +97,6 @@
     align-items: stretch;
   }
 
-  /* 图片框 */
   .card-frame {
     width: 100%;
     aspect-ratio: 3 / 4;
@@ -109,21 +104,14 @@
     overflow: hidden;
     margin-bottom: 14px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    flex-shrink: 0;
   }
-
-  .card-frame:hover {
-    transform: translateY(-8px);
-  }
-
-  .card-1 .card-frame:hover { box-shadow: 0 24px 60px rgba(255, 90, 0, 0.55); }
-  .card-2 .card-frame:hover { box-shadow: 0 24px 60px rgba(30, 120, 255, 0.55); }
-  .card-3 .card-frame:hover { box-shadow: 0 24px 60px rgba(255, 190, 0, 0.55); }
-
-  /* 边框光 */
-  .card-1 .card-frame { box-shadow: 0 0 0 1.5px rgba(255,90,0,0.3); }
-  .card-2 .card-frame { box-shadow: 0 0 0 1.5px rgba(30,120,255,0.3); }
-  .card-3 .card-frame { box-shadow: 0 0 0 1.5px rgba(255,190,0,0.3); }
+  .card-frame:hover { transform: translateY(-8px); }
+  .card-1 .card-frame { box-shadow: 0 4px 20px rgba(255,90,0,0.2); }
+  .card-2 .card-frame { box-shadow: 0 4px 20px rgba(30,120,255,0.2); }
+  .card-3 .card-frame { box-shadow: 0 4px 20px rgba(200,150,0,0.2); }
+  .card-1 .card-frame:hover { box-shadow: 0 24px 60px rgba(255,90,0,0.45); }
+  .card-2 .card-frame:hover { box-shadow: 0 24px 60px rgba(30,120,255,0.45); }
+  .card-3 .card-frame:hover { box-shadow: 0 24px 60px rgba(200,150,0,0.45); }
 
   .card-img {
     width: 100%;
@@ -132,32 +120,29 @@
     display: block;
   }
 
-  /* ===== 立即加入按钮 ===== */
+  /* 立即加入按钮 */
   .card-join {
     display: block;
     width: 100%;
     padding: 14px;
     border-radius: 12px;
-    border: 1.5px solid rgba(255,255,255,0.18);
-    background: rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.9);
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 6px;
     text-align: center;
     text-decoration: none;
-    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    transition: opacity 0.2s, transform 0.1s;
     touch-action: manipulation;
+    color: #fff;
   }
-
-  .card-1 .card-join:hover { background: rgba(255,90,0,0.25); border-color: rgba(255,90,0,0.7); color: #fff; }
-  .card-2 .card-join:hover { background: rgba(30,120,255,0.25); border-color: rgba(30,120,255,0.7); color: #fff; }
-  .card-3 .card-join:hover { background: rgba(255,190,0,0.25); border-color: rgba(255,190,0,0.7); color: #fff; }
+  .card-1 .card-join { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+  .card-2 .card-join { background: linear-gradient(135deg, #1a6dff, #0099ff); }
+  .card-3 .card-join { background: linear-gradient(135deg, #c89b00, #f5d020); color: #3a2a00; }
+  .card-join:hover { opacity: 0.88; }
   .card-join:active { transform: scale(0.97); }
 
-  /* ===== 底部奖励区 ===== */
+  /* 底部 */
   .cta { text-align: center; }
-
   .rewards {
     display: flex;
     justify-content: center;
@@ -165,50 +150,37 @@
     flex-wrap: wrap;
     margin-bottom: 32px;
   }
-
   .reward-pill {
     padding: 9px 18px;
     border-radius: 30px;
     font-size: 13px;
     font-weight: 600;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.65);
+    background: #f5f5f5;
+    border: 1px solid #eee;
+    color: #555;
     display: flex;
     align-items: center;
     gap: 6px;
   }
-
   .footer-meta {
     font-size: 12px;
-    color: rgba(255,255,255,0.2);
+    color: #ccc;
     letter-spacing: 3px;
   }
   .footer-meta span { margin: 0 10px; }
 
-  /* ===== 手机端 ===== */
+  /* 手机端 */
   @media (max-width: 768px) {
     .container { padding: 32px 20px 48px; }
-
-    .header h1 { font-size: 32px; }
+    .header h1 { font-size: 30px; }
     .header .intro-line { font-size: 14px; }
     .header { margin-bottom: 36px; }
-
-    .cards {
-      flex-direction: column;
-      align-items: center;
-      gap: 36px;
-    }
-
-    .card {
-      max-width: 88vw;
-      width: 88vw;
-    }
-
-    .card-join {
-      font-size: 16px;
-      padding: 16px;
-    }
+    .cards { flex-direction: column; align-items: center; gap: 36px; }
+    .card { max-width: 88vw; width: 88vw; }
+    .card-join { font-size: 16px; padding: 16px; }
+    .fog-1 { width: 280px; height: 280px; top: -80px; left: -80px; }
+    .fog-2 { width: 320px; height: 320px; bottom: -100px; right: -80px; }
+    .fog-3 { width: 200px; height: 200px; }
   }
 </style>
 </head>
@@ -219,111 +191,86 @@
 <div class="fog fog-2"></div>
 <div class="fog fog-3"></div>
 
-
 <div class="container">
 
-  <!-- 标题 -->
   <div class="header">
-    <div class="eyebrow">AI 破局俱乐部 </div>
+    <div class="eyebrow">AI 破局俱乐部 · 知识星球</div>
     <h1>破局者<em>图鉴</em></h1>
     <div class="sub">AI 破局之旅 · 30天冒险</div>
     <div class="intro-line">
-      这本图鉴，专门记录<strong>在破局用AI真正做事的人</strong><br>
-      选择你的阵营，写下你的经历复盘
+      这本图鉴，专门记录<strong>真实干过一件事的人</strong><br>
+      选择你的阵营，写下你的故事，让我们把你收录进来
     </div>
   </div>
 
-  <!-- 三张卡片 -->
   <div class="cards">
 
     <div class="card card-1">
       <div class="card-frame">
         <img src="card1.jpg" alt="AI逆袭者" class="card-img">
       </div>
-      <a class="card-join"
-         href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh"
-         target="_blank" rel="noopener">立即加入</a>
+      <a class="card-join" href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh" target="_blank" rel="noopener">立即加入</a>
     </div>
 
     <div class="card card-2">
       <div class="card-frame">
         <img src="card2.jpg" alt="AI实操派" class="card-img">
       </div>
-      <a class="card-join"
-         href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh"
-         target="_blank" rel="noopener">立即加入</a>
+      <a class="card-join" href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh" target="_blank" rel="noopener">立即加入</a>
     </div>
 
     <div class="card card-3">
       <div class="card-frame">
         <img src="card3.jpg" alt="AI独行者" class="card-img">
       </div>
-      <a class="card-join"
-         href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh"
-         target="_blank" rel="noopener">立即加入</a>
+      <a class="card-join" href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh" target="_blank" rel="noopener">立即加入</a>
     </div>
 
   </div>
 
-  <!-- 奖励区 -->
   <div class="cta">
     <div class="rewards">
-      <div class="reward-pill">🏆 精华前3 · 送破局周边短袖</div>
-      <div class="reward-pill">💎 精华数量第一阵营 · 瓜分2颗AI之心</div> 
-      <div class="reward-pill">🌹 长文数量第一阵营 · 瓜分1颗AI之心</div>
+      <div class="reward-pill">🏆 精华前五 · 送限定短袖</div>
+      <div class="reward-pill">✨ 首次精华 · 也送短袖</div>
+      <div class="reward-pill">💎 第一阵营 · 瓜分5颗AI之心</div>
       <div class="reward-pill">🔮 发长文 · 得晶体</div>
     </div>
     <div class="footer-meta">
-      <span>· 30天内容冲刺 ·</span>
+      <span>· 30天冲刺 ·</span>
       <span>· 2000字以上长文 ·</span>
-      <span>· 你值得被更多人看到 ·</span>
+      <span>· AI破局俱乐部 ·</span>
     </div>
   </div>
 
 </div>
 
 <script>
-// 粒子背景
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 let particles = [];
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
-
 function createParticle() {
-  return {
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 80 + 30,
-    opacity: Math.random() * 0.06 + 0.015,
-    dx: (Math.random() - 0.5) * 0.25,
-    dy: (Math.random() - 0.5) * 0.25,
-    hue: [210, 220, 240][Math.floor(Math.random() * 3)],
-  };
+  return { x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+    r: Math.random()*80+30, opacity: Math.random()*0.05+0.01,
+    dx: (Math.random()-0.5)*0.25, dy: (Math.random()-0.5)*0.25,
+    hue: [210,220,240][Math.floor(Math.random()*3)] };
 }
-
-for (let i = 0; i < 14; i++) particles.push(createParticle());
-
+for (let i=0;i<14;i++) particles.push(createParticle());
 function drawParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach(p => {
-    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-    grad.addColorStop(0, `hsla(${p.hue}, 75%, 65%, ${p.opacity})`);
-    grad.addColorStop(1, `hsla(${p.hue}, 75%, 65%, 0)`);
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = grad;
-    ctx.fill();
-    p.x += p.dx; p.y += p.dy;
-    if (p.x < -p.r) p.x = canvas.width + p.r;
-    if (p.x > canvas.width + p.r) p.x = -p.r;
-    if (p.y < -p.r) p.y = canvas.height + p.r;
-    if (p.y > canvas.height + p.r) p.y = -p.r;
+    const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+    g.addColorStop(0,`hsla(${p.hue},75%,60%,${p.opacity})`);
+    g.addColorStop(1,`hsla(${p.hue},75%,60%,0)`);
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=g; ctx.fill();
+    p.x+=p.dx; p.y+=p.dy;
+    if(p.x<-p.r) p.x=canvas.width+p.r;
+    if(p.x>canvas.width+p.r) p.x=-p.r;
+    if(p.y<-p.r) p.y=canvas.height+p.r;
+    if(p.y>canvas.height+p.r) p.y=-p.r;
   });
   requestAnimationFrame(drawParticles);
 }
