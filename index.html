@@ -4,11 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>破局者图鉴 · AI破局俱乐部</title>
+ .fog {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.fog-1 { width: 500px; height: 500px; background: rgba(100,160,255,0.12); top: -150px; left: -150px; }
+.fog-2 { width: 600px; height: 600px; background: rgba(80,130,255,0.1); bottom: -200px; right: -150px; }
+.fog-3 { width: 350px; height: 350px; background: rgba(140,190,255,0.08); top: 45%; left: 38%; }
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   body {
-    background: #0a0a18;
+    background: #ffffff;
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
@@ -210,12 +220,12 @@
 
   <!-- 标题 -->
   <div class="header">
-    <div class="eyebrow">AI 破局俱乐部 · 知识星球</div>
+    <div class="eyebrow">AI 破局俱乐部 </div>
     <h1>破局者<em>图鉴</em></h1>
     <div class="sub">AI 破局之旅 · 30天冒险</div>
     <div class="intro-line">
-      这本图鉴，专门记录<strong>真实干过一件事的人</strong><br>
-      选择你的阵营，写下你的故事，让我们把你收录进来
+      这本图鉴，专门记录<strong>在破局用AI真正做事的人</strong><br>
+      选择你的阵营，写下你的经历复盘
     </div>
   </div>
 
@@ -254,15 +264,15 @@
   <!-- 奖励区 -->
   <div class="cta">
     <div class="rewards">
-      <div class="reward-pill">🏆 精华前五 · 送限定短袖</div>
-      <div class="reward-pill">✨ 首次精华 · 也送短袖</div>
-      <div class="reward-pill">💎 第一阵营 · 瓜分5颗AI之心</div>
+      <div class="reward-pill">🏆 精华前3 · 送破局周边短袖</div>
+      <div class="reward-pill">💎 精华数量第一阵营 · 瓜分2颗AI之心</div> 
+      <div class="reward-pill">🌹 长文数量第一阵营 · 瓜分1颗AI之心</div>
       <div class="reward-pill">🔮 发长文 · 得晶体</div>
     </div>
     <div class="footer-meta">
-      <span>· 30天冲刺 ·</span>
+      <span>· 30天内容冲刺 ·</span>
       <span>· 2000字以上长文 ·</span>
-      <span>· AI破局俱乐部 ·</span>
+      <span>· 你值得被更多人看到 ·</span>
     </div>
   </div>
 
