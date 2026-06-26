@@ -636,14 +636,14 @@ function submitForm() {
 
   const btn = document.getElementById('modal-submit-btn');
   const campName = camps[currentCamp].name;
-  const campId = currentCamp;
 
   btn.textContent = '提交中...';
   btn.disabled = true;
 
-  // 发送到 Google Sheets（fire-and-forget，不等响应）
+  // 发送到 Google Sheets（双重发送，兼容手机）
   const params = new URLSearchParams({ id: val, camp: campName });
-  fetch(SHEET_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
+  try { fetch(SHEET_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {}); } catch(e) {}
+  try { new Image().src = SHEET_URL + '?' + params.toString(); } catch(e) {}
 
   // 本地备份
   const record = { id: val, camp: campName, time: new Date().toLocaleString() };
