@@ -14,7 +14,6 @@
     overflow-x: hidden;
   }
 
-  /* 蓝色雾气 */
   .fog {
     position: fixed;
     border-radius: 50%;
@@ -22,10 +21,9 @@
     pointer-events: none;
     z-index: 0;
   }
-.fog-1 { width: 600px; height: 600px; background: rgba(100,160,255,0.28); top: -180px; left: -180px; }
-.fog-2 { width: 700px; height: 700px; background: rgba(80,130,255,0.22); bottom: -220px; right: -180px; }
-.fog-3 { width: 450px; height: 450px; background: rgba(140,190,255,0.18); top: 40%; left: 35%; }
-
+  .fog-1 { width: 600px; height: 600px; background: rgba(100,160,255,0.28); top: -180px; left: -180px; }
+  .fog-2 { width: 700px; height: 700px; background: rgba(80,130,255,0.22); bottom: -220px; right: -180px; }
+  .fog-3 { width: 450px; height: 450px; background: rgba(140,190,255,0.18); top: 40%; left: 35%; }
 
   #particles {
     position: fixed;
@@ -43,45 +41,14 @@
     padding: 48px 32px 64px;
   }
 
-  /* 标题 */
-  .header {
-    text-align: center;
-    margin-bottom: 52px;
-  }
-  .header .eyebrow {
-    font-size: 12px;
-    letter-spacing: 6px;
-    color: #aaa;
-    margin-bottom: 14px;
-  }
-  .header h1 {
-    font-size: 52px;
-    font-weight: 900;
-    color: #1a1a2e;
-    line-height: 1.1;
-    margin-bottom: 10px;
-  }
-  .header h1 em {
-    font-style: normal;
-    color: #f5a623;
-  }
-  .header .sub {
-    font-size: 13px;
-    letter-spacing: 4px;
-    color: #bbb;
-    margin-bottom: 20px;
-  }
-  .header .intro-line {
-    font-size: 16px;
-    color: #666;
-    line-height: 2;
-  }
-  .header .intro-line strong {
-    color: #1a1a2e;
-    font-weight: 700;
-  }
+  .header { text-align: center; margin-bottom: 52px; }
+  .header .eyebrow { font-size: 12px; letter-spacing: 6px; color: #aaa; margin-bottom: 14px; }
+  .header h1 { font-size: 52px; font-weight: 900; color: #1a1a2e; line-height: 1.1; margin-bottom: 10px; }
+  .header h1 em { font-style: normal; color: #f5a623; }
+  .header .sub { font-size: 13px; letter-spacing: 4px; color: #bbb; margin-bottom: 20px; }
+  .header .intro-line { font-size: 16px; color: #666; line-height: 2; }
+  .header .intro-line strong { color: #1a1a2e; font-weight: 700; }
 
-  /* 卡片 */
   .cards {
     display: flex;
     gap: 28px;
@@ -114,14 +81,27 @@
   .card-2 .card-frame:hover { box-shadow: 0 24px 60px rgba(30,120,255,0.45); }
   .card-3 .card-frame:hover { box-shadow: 0 24px 60px rgba(200,150,0,0.45); }
 
-  .card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+  .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  /* 立即加入按钮 */
+  /* 标签模块 */
+  .card-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .card-topic {
+    padding: 5px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .card-1 .card-topic { background: rgba(255,90,0,0.08); color: #cc4400; border: 1px solid rgba(255,90,0,0.2); }
+  .card-2 .card-topic { background: rgba(30,120,255,0.08); color: #1a5ecc; border: 1px solid rgba(30,120,255,0.2); }
+  .card-3 .card-topic { background: rgba(180,130,0,0.08); color: #7a5500; border: 1px solid rgba(180,130,0,0.2); }
+
   .card-join {
     display: block;
     width: 100%;
@@ -142,15 +122,8 @@
   .card-join:hover { opacity: 0.88; }
   .card-join:active { transform: scale(0.97); }
 
-  /* 底部 */
   .cta { text-align: center; }
-  .rewards {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-  }
+  .rewards { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
   .reward-pill {
     padding: 9px 18px;
     border-radius: 30px;
@@ -163,14 +136,9 @@
     align-items: center;
     gap: 6px;
   }
-  .footer-meta {
-    font-size: 12px;
-    color: #ccc;
-    letter-spacing: 3px;
-  }
+  .footer-meta { font-size: 12px; color: #ccc; letter-spacing: 3px; }
   .footer-meta span { margin: 0 10px; }
 
-  /* 手机端 */
   @media (max-width: 768px) {
     .container { padding: 32px 20px 48px; }
     .header h1 { font-size: 30px; }
@@ -210,6 +178,11 @@
       <div class="card-frame">
         <img src="card1.jpg" alt="AI逆袭者" class="card-img">
       </div>
+      <div class="card-topics">
+        <span class="card-topic">真实案例</span>
+        <span class="card-topic">用AI改变处境</span>
+        <span class="card-topic">逆袭人生</span>
+      </div>
       <a class="card-join" href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh" target="_blank" rel="noopener">立即加入</a>
     </div>
 
@@ -217,12 +190,21 @@
       <div class="card-frame">
         <img src="card2.jpg" alt="AI实操派" class="card-img">
       </div>
+      <div class="card-topics">
+        <span class="card-topic">AI技术</span>
+        <span class="card-topic">AI工具</span>
+        <span class="card-topic">工作流分享</span>
+      </div>
       <a class="card-join" href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh" target="_blank" rel="noopener">立即加入</a>
     </div>
 
     <div class="card card-3">
       <div class="card-frame">
         <img src="card3.jpg" alt="AI独行者" class="card-img">
+      </div>
+      <div class="card-topics">
+        <span class="card-topic">一人公司</span>
+        <span class="card-topic">个人AI业务</span>
       </div>
       <a class="card-join" href="https://d16rg8unadx.feishu.cn/share/base/form/shrcn0Ra3XwbUcyaOapgGrI8sCh" target="_blank" rel="noopener">立即加入</a>
     </div>
@@ -233,8 +215,8 @@
     <div class="rewards">
       <div class="reward-pill">🏆 精华前3 · 送限定短袖</div>
       <div class="reward-pill">💎 精华数量第1的阵营 · 瓜分2颗AI之心</div>
-      <div class="reward-pill">💎 长文数量第1的阵营 · 瓜分1颗AI之心</div>
-      <div class="reward-pill">🔮 发长文 · 得晶体奖励</div>
+      <div class="reward-pill">💰 长文数量第1的阵营 · 瓜分1颗AI之心</div>
+      <div class="reward-pill">🔮 发长文 · 得2晶体奖励</div>
     </div>
     <div class="footer-meta">
       <span>· 30天内容冲刺 ·</span>
@@ -259,6 +241,10 @@ function createParticle() {
     hue: [210,220,240][Math.floor(Math.random()*3)] };
 }
 for (let i=0;i<14;i++) particles.push(createParticle());
+
+let mouseX = canvas.width/2, mouseY = canvas.height/2;
+document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
 function drawParticles() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach(p => {
@@ -267,6 +253,11 @@ function drawParticles() {
     g.addColorStop(1,`hsla(${p.hue},75%,60%,0)`);
     ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fillStyle=g; ctx.fill();
+    const mdx=mouseX-p.x, mdy=mouseY-p.y;
+    const dist=Math.sqrt(mdx*mdx+mdy*mdy);
+    if(dist>1){ p.dx+=(mdx/dist)*0.012; p.dy+=(mdy/dist)*0.012; }
+    const spd=Math.sqrt(p.dx*p.dx+p.dy*p.dy);
+    if(spd>0.9){ p.dx=p.dx/spd*0.9; p.dy=p.dy/spd*0.9; }
     p.x+=p.dx; p.y+=p.dy;
     if(p.x<-p.r) p.x=canvas.width+p.r;
     if(p.x>canvas.width+p.r) p.x=-p.r;
